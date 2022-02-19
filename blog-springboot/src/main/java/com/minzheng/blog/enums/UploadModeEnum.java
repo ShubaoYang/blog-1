@@ -15,7 +15,8 @@ public enum UploadModeEnum {
     /**
      * oss
      */
-    OSS("oss", "ossUploadStrategyImpl"),
+//    OSS("oss", "ossUploadStrategyImpl"),
+    OSS("oss", "qingYunOssUploadStrategyImpl"),
     /**
      * 本地
      */

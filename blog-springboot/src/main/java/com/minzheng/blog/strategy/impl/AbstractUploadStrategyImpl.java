@@ -3,6 +3,7 @@ package com.minzheng.blog.strategy.impl;
 import com.minzheng.blog.exception.BizException;
 import com.minzheng.blog.strategy.UploadStrategy;
 import com.minzheng.blog.util.FileUtils;
+import com.qingstor.sdk.exception.QSException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -45,7 +46,7 @@ public abstract class AbstractUploadStrategyImpl implements UploadStrategy {
      * @param filePath 文件路径
      * @return {@link Boolean}
      */
-    public abstract Boolean exists(String filePath);
+    public abstract Boolean exists(String filePath) throws QSException;
 
     /**
      * 上传
