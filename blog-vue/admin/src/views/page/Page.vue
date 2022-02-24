@@ -3,12 +3,7 @@
     <!-- 标题 -->
     <div class="title">{{ this.$route.name }}</div>
     <div class="operation-container">
-      <el-button
-        type="primary"
-        size="small"
-        icon="el-icon-plus"
-        @click="openModel(null)"
-      >
+      <el-button type="primary" size="small" icon="el-icon-plus" @click="openModel(null)">
         新建页面
       </el-button>
     </div>
@@ -48,25 +43,13 @@
           <el-input style="width:220px" v-model="pageForum.pageLabel" />
         </el-form-item>
         <el-form-item label="页面封面">
-          <el-upload
-            class="upload-cover"
-            drag
-            :show-file-list="false"
-            action="/api/admin/config/images"
-            multiple
-            :before-upload="beforeUpload"
-            :on-success="uploadCover"
-          >
+          <el-upload class="upload-cover" drag :show-file-list="false" action="/api/admin/config/images" multiple :before-upload="beforeUpload" :on-success="uploadCover">
             <i class="el-icon-upload" v-if="pageForum.pageCover == ''" />
             <div class="el-upload__text" v-if="pageForum.pageCover == ''">
-              将文件拖到此处，或<em>点击上传</em>
+              将文件拖到此处，或
+              <em>点击上传</em>
             </div>
-            <img
-              v-else
-              :src="pageForum.pageCover"
-              width="360px"
-              height="180px"
-            />
+            <img v-else :src="pageForum.pageCover" width="360px" height="180px" />
           </el-upload>
         </el-form-item>
       </el-form>

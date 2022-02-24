@@ -58,4 +58,6 @@ public interface CategoryService extends IService<Category> {
      */
     void saveOrUpdateCategory(CategoryVO categoryVO);
 
+    Category saveOrUpdateCategory(String categoryName);
+
 }

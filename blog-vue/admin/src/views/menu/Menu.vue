@@ -3,42 +3,19 @@
     <!-- 标题 -->
     <div class="title">{{ this.$route.name }}</div>
     <div class="operation-container">
-      <el-button
-        type="primary"
-        size="small"
-        icon="el-icon-plus"
-        @click="openModel(null)"
-      >
+      <el-button type="primary" size="small" icon="el-icon-plus" @click="openModel(null)">
         新增菜单
       </el-button>
       <!-- 数据筛选 -->
       <div style="margin-left:auto">
-        <el-input
-          v-model="keywords"
-          prefix-icon="el-icon-search"
-          size="small"
-          placeholder="请输入菜单名"
-          style="width:200px"
-          @keyup.enter.native="listMenus"
-        />
-        <el-button
-          type="primary"
-          size="small"
-          icon="el-icon-search"
-          style="margin-left:1rem"
-          @click="listMenus"
-        >
+        <el-input v-model="keywords" prefix-icon="el-icon-search" size="small" placeholder="请输入菜单名" style="width:200px" @keyup.enter.native="listMenus" />
+        <el-button type="primary" size="small" icon="el-icon-search" style="margin-left:1rem" @click="listMenus">
           搜索
         </el-button>
       </div>
     </div>
     <!-- 权限列表 -->
-    <el-table
-      v-loading="loading"
-      :data="menuList"
-      row-key="id"
-      :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-    >
+    <el-table v-loading="loading" :data="menuList" row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
       <!-- 菜单名称 -->
       <el-table-column prop="name" label="菜单名称" width="140" />
       <!-- 菜单icon -->
@@ -48,12 +25,7 @@
         </template>
       </el-table-column>
       <!-- 菜单排序 -->
-      <el-table-column
-        prop="orderNum"
-        align="center"
-        label="排序"
-        width="100"
-      />
+      <el-table-column prop="orderNum" align="center" label="排序" width="100" />
       <!-- 访问路径 -->
       <el-table-column prop="path" label="访问路径" />
       <!-- 组件路径 -->
@@ -61,47 +33,25 @@
       <!-- 是否隐藏 -->
       <el-table-column prop="isHidden" label="隐藏" align="center" width="80">
         <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.isHidden"
-            active-color="#13ce66"
-            inactive-color="#F4F4F5"
-            :active-value="1"
-            :inactive-value="0"
-            @change="changeDisable(scope.row)"
-          />
+          <el-switch v-model="scope.row.isHidden" active-color="#13ce66" inactive-color="#F4F4F5" :active-value="1" :inactive-value="0" @change="changeDisable(scope.row)" />
         </template>
       </el-table-column>
       <!-- 创建时间 -->
-      <el-table-column
-        prop="createTime"
-        label="创建时间"
-        align="center"
-        width="150"
-      >
+      <el-table-column prop="createTime" label="创建时间" align="center" width="150">
         <template slot-scope="scope">
-          <i class="el-icon-time" style="margin-right:5px" />
-          {{ scope.row.createTime | date }}
+          <i class="el-icon-time" style="margin-right:5px" /> {{ scope.row.createTime | date }}
         </template>
       </el-table-column>
       <!-- 操作 -->
       <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
-          <el-button
-            type="text"
-            size="mini"
-            @click="openModel(scope.row, 1)"
-            v-if="scope.row.children"
-          >
+          <el-button type="text" size="mini" @click="openModel(scope.row, 1)" v-if="scope.row.children">
             <i class="el-icon-plus" /> 新增
           </el-button>
           <el-button type="text" size="mini" @click="openModel(scope.row, 2)">
             <i class="el-icon-edit" /> 修改
           </el-button>
-          <el-popconfirm
-            title="确定删除吗？"
-            style="margin-left:10px"
-            @confirm="deleteMenu(scope.row.id)"
-          >
+          <el-popconfirm title="确定删除吗？" style="margin-left:10px" @confirm="deleteMenu(scope.row.id)">
             <el-button size="mini" type="text" slot="reference">
               <i class="el-icon-delete" /> 删除
             </el-button>
@@ -128,23 +78,13 @@
         <el-form-item label="菜单图标">
           <el-popover placement="bottom-start" width="300" trigger="click">
             <el-row>
-              <el-col
-                v-for="(item, index) of iconList"
-                :key="index"
-                :md="12"
-                :gutter="10"
-              >
+              <el-col v-for="(item, index) of iconList" :key="index" :md="12" :gutter="10">
                 <div class="icon-item" @click="checkIcon(item)">
                   <i :class="'iconfont ' + item" /> {{ item }}
                 </div>
               </el-col>
             </el-row>
-            <el-input
-              :prefix-icon="'iconfont ' + menuForm.icon"
-              slot="reference"
-              v-model="menuForm.icon"
-              style="width:220px"
-            />
+            <el-input :prefix-icon="'iconfont ' + menuForm.icon" slot="reference" v-model="menuForm.icon" style="width:220px" />
           </el-popover>
         </el-form-item>
         <!-- 组件路径 -->
@@ -157,12 +97,7 @@
         </el-form-item>
         <!-- 显示排序 -->
         <el-form-item label="显示排序">
-          <el-input-number
-            v-model="menuForm.orderNum"
-            controls-position="right"
-            :min="1"
-            :max="10"
-          />
+          <el-input-number v-model="menuForm.orderNum" controls-position="right" :min="1" :max="10" />
         </el-form-item>
         <!-- 显示状态 -->
         <el-form-item label="显示状态">

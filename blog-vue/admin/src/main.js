@@ -35,11 +35,11 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false;
 Vue.prototype.$moment = dayjs;
 
-Vue.filter("date", function(value, formatStr = "YYYY-MM-DD") {
+Vue.filter("date", function (value, formatStr = "YYYY-MM-DD") {
   return dayjs(value).format(formatStr);
 });
 
-Vue.filter("dateTime", function(value, formatStr = "YYYY-MM-DD HH:mm:ss") {
+Vue.filter("dateTime", function (value, formatStr = "YYYY-MM-DD HH:mm:ss") {
   return dayjs(value).format(formatStr);
 });
 
@@ -68,7 +68,7 @@ router.afterEach(() => {
 
 // 响应拦截器
 axios.interceptors.response.use(
-  function(response) {
+  function (response) {
     switch (response.data.code) {
       case 40001:
         Vue.prototype.$message({
@@ -86,7 +86,7 @@ axios.interceptors.response.use(
     }
     return response;
   },
-  function(error) {
+  function (error) {
     return Promise.reject(error);
   }
 );

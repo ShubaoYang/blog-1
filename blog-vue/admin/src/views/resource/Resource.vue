@@ -3,42 +3,19 @@
     <!-- 标题 -->
     <div class="title">{{ this.$route.name }}</div>
     <div class="operation-container">
-      <el-button
-        type="primary"
-        size="small"
-        icon="el-icon-plus"
-        @click="openModel(null)"
-      >
+      <el-button type="primary" size="small" icon="el-icon-plus" @click="openModel(null)">
         新增模块
       </el-button>
       <!-- 数据筛选 -->
       <div style="margin-left:auto">
-        <el-input
-          v-model="keywords"
-          prefix-icon="el-icon-search"
-          size="small"
-          placeholder="请输入资源名"
-          style="width:200px"
-          @keyup.enter.native="listResources"
-        />
-        <el-button
-          type="primary"
-          size="small"
-          icon="el-icon-search"
-          style="margin-left:1rem"
-          @click="listResources"
-        >
+        <el-input v-model="keywords" prefix-icon="el-icon-search" size="small" placeholder="请输入资源名" style="width:200px" @keyup.enter.native="listResources" />
+        <el-button type="primary" size="small" icon="el-icon-search" style="margin-left:1rem" @click="listResources">
           搜索
         </el-button>
       </div>
     </div>
     <!-- 权限列表 -->
-    <el-table
-      v-loading="loading"
-      :data="resourceList"
-      row-key="id"
-      :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-    >
+    <el-table v-loading="loading" :data="resourceList" row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
       <el-table-column prop="resourceName" label="资源名" width="220" />
       <el-table-column prop="url" label="资源路径" width="300" />
       <el-table-column prop="requetMethod" label="请求方式">
@@ -50,45 +27,23 @@
       </el-table-column>
       <el-table-column prop="isAnonymous" label="匿名访问" align="center">
         <template slot-scope="scope">
-          <el-switch
-            v-if="scope.row.url"
-            v-model="scope.row.isAnonymous"
-            active-color="#13ce66"
-            inactive-color="#F4F4F5"
-            :active-value="1"
-            :inactive-value="0"
-            @change="changeResource(scope.row)"
-          />
+          <el-switch v-if="scope.row.url" v-model="scope.row.isAnonymous" active-color="#13ce66" inactive-color="#F4F4F5" :active-value="1" :inactive-value="0" @change="changeResource(scope.row)" />
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="创建时间" align="center">
         <template slot-scope="scope">
-          <i class="el-icon-time" style="margin-right:5px" />
-          {{ scope.row.createTime | date }}
+          <i class="el-icon-time" style="margin-right:5px" /> {{ scope.row.createTime | date }}
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
-          <el-button
-            type="text"
-            size="mini"
-            @click="openAddResourceModel(scope.row)"
-            v-if="scope.row.children"
-          >
+          <el-button type="text" size="mini" @click="openAddResourceModel(scope.row)" v-if="scope.row.children">
             <i class="el-icon-plus" /> 新增
           </el-button>
-          <el-button
-            type="text"
-            size="mini"
-            @click="openEditResourceModel(scope.row)"
-          >
+          <el-button type="text" size="mini" @click="openEditResourceModel(scope.row)">
             <i class="el-icon-edit" /> 修改
           </el-button>
-          <el-popconfirm
-            title="确定删除吗？"
-            style="margin-left:10px"
-            @confirm="deleteResource(scope.row.id)"
-          >
+          <el-popconfirm title="确定删除吗？" style="margin-left:10px" @confirm="deleteResource(scope.row.id)">
             <el-button size="mini" type="text" slot="reference">
               <i class="el-icon-delete" /> 删除
             </el-button>

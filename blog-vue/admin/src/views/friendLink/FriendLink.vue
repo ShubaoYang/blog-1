@@ -3,59 +3,25 @@
     <div class="title">{{ this.$route.name }}</div>
     <!-- 表格操作 -->
     <div class="operation-container">
-      <el-button
-        type="primary"
-        size="small"
-        icon="el-icon-plus"
-        @click="openModel(null)"
-      >
+      <el-button type="primary" size="small" icon="el-icon-plus" @click="openModel(null)">
         新增
       </el-button>
-      <el-button
-        type="danger"
-        size="small"
-        icon="el-icon-delete"
-        :disabled="linkIdList.length == 0"
-        @click="deleteFlag = true"
-      >
+      <el-button type="danger" size="small" icon="el-icon-delete" :disabled="linkIdList.length == 0" @click="deleteFlag = true">
         批量删除
       </el-button>
       <!-- 条件筛选 -->
       <div style="margin-left:auto">
-        <el-input
-          v-model="keywords"
-          prefix-icon="el-icon-search"
-          size="small"
-          placeholder="请输入友链名"
-          style="width:200px"
-          @keyup.enter.native="searchLinks"
-        />
-        <el-button
-          type="primary"
-          size="small"
-          icon="el-icon-search"
-          style="margin-left:1rem"
-          @click="searchLinks"
-        >
+        <el-input v-model="keywords" prefix-icon="el-icon-search" size="small" placeholder="请输入友链名" style="width:200px" @keyup.enter.native="searchLinks" />
+        <el-button type="primary" size="small" icon="el-icon-search" style="margin-left:1rem" @click="searchLinks">
           搜索
         </el-button>
       </div>
     </div>
     <!-- 表格展示 -->
-    <el-table
-      border
-      :data="linkList"
-      @selection-change="selectionChange"
-      v-loading="loading"
-    >
+    <el-table border :data="linkList" @selection-change="selectionChange" v-loading="loading">
       <!-- 表格列 -->
       <el-table-column type="selection" width="55" />
-      <el-table-column
-        prop="linkAvatar"
-        label="链接头像"
-        align="center"
-        width="180"
-      >
+      <el-table-column prop="linkAvatar" label="链接头像" align="center" width="180">
         <template slot-scope="scope">
           <img :src="scope.row.linkAvatar" width="40" height="40" />
         </template>
@@ -63,15 +29,9 @@
       <el-table-column prop="linkName" label="链接名" align="center" />
       <el-table-column prop="linkAddress" label="链接地址" align="center" />
       <el-table-column prop="linkIntro" label="链接介绍" align="center" />
-      <el-table-column
-        prop="createTime"
-        label="创建时间"
-        width="140"
-        align="center"
-      >
+      <el-table-column prop="createTime" label="创建时间" width="140" align="center">
         <template slot-scope="scope">
-          <i class="el-icon-time" style="margin-right:5px" />
-          {{ scope.row.createTime | date }}
+          <i class="el-icon-time" style="margin-right:5px" /> {{ scope.row.createTime | date }}
         </template>
       </el-table-column>
       <!-- 列操作 -->
@@ -80,11 +40,7 @@
           <el-button type="primary" size="mini" @click="openModel(scope.row)">
             编辑
           </el-button>
-          <el-popconfirm
-            title="确定删除吗？"
-            style="margin-left:1rem"
-            @confirm="deleteLink(scope.row.id)"
-          >
+          <el-popconfirm title="确定删除吗？" style="margin-left:1rem" @confirm="deleteLink(scope.row.id)">
             <el-button size="mini" type="danger" slot="reference">
               删除
             </el-button>
@@ -93,17 +49,7 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination
-      class="pagination-container"
-      background
-      @size-change="sizeChange"
-      @current-change="currentChange"
-      :current-page="current"
-      :page-size="size"
-      :total="count"
-      :page-sizes="[10, 20]"
-      layout="total, sizes, prev, pager, next, jumper"
-    />
+    <el-pagination class="pagination-container" background @size-change="sizeChange" @current-change="currentChange" :current-page="current" :page-size="size" :total="count" :page-sizes="[10, 20]" layout="total, sizes, prev, pager, next, jumper" />
     <!-- 批量删除对话框 -->
     <el-dialog :visible.sync="deleteFlag" width="30%">
       <div class="dialog-title-container" slot="title">

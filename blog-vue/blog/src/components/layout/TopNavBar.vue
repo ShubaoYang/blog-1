@@ -8,7 +8,9 @@
         </router-link>
       </div>
       <div style="margin-left:auto">
-        <a @click="openSearch"><i class="iconfont iconsousuo"/></a>
+        <a @click="openSearch">
+          <i class="iconfont iconsousuo" />
+        </a>
         <a @click="openDrawer" style="margin-left:10px;font-size:20px">
           <i class="iconfont iconhanbao" />
         </a>
@@ -89,20 +91,11 @@
           </router-link>
         </div>
         <div class="menus-item">
-          <a
-            class="menu-btn"
-            v-if="!this.$store.state.avatar"
-            @click="openLogin"
-          >
+          <a class="menu-btn" v-if="!this.$store.state.avatar" @click="openLogin">
             <i class="iconfont icondenglu" /> 登录
           </a>
           <template v-else>
-            <img
-              class="user-avatar"
-              :src="this.$store.state.avatar"
-              height="30"
-              width="30"
-            />
+            <img class="user-avatar" :src="this.$store.state.avatar" height="30" width="30" />
             <ul class="menus-submenu">
               <li>
                 <router-link to="/user">
@@ -110,7 +103,8 @@
                 </router-link>
               </li>
               <li>
-                <a @click="logout"><i class="iconfont icontuichu" /> 退出</a>
+                <a @click="logout">
+                  <i class="iconfont icontuichu" /> 退出</a>
               </li>
             </ul>
           </template>

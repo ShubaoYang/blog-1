@@ -204,6 +204,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, Article> impleme
     }
 
 
+    /**
+     * TODO 点赞信息可以存到数据库中
+     * @param articleId 文章id
+     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveArticleLike(Integer articleId) {

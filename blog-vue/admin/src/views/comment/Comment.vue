@@ -3,87 +3,37 @@
     <div class="title">{{ this.$route.name }}</div>
     <div class="review-menu">
       <span>状态</span>
-      <span
-        @click="changeReview(null)"
-        :class="isReview == null ? 'active-review' : 'review'"
-      >
+      <span @click="changeReview(null)" :class="isReview == null ? 'active-review' : 'review'">
         全部
       </span>
-      <span
-        @click="changeReview(1)"
-        :class="isReview == 1 ? 'active-review' : 'review'"
-      >
+      <span @click="changeReview(1)" :class="isReview == 1 ? 'active-review' : 'review'">
         正常
       </span>
-      <span
-        @click="changeReview(0)"
-        :class="isReview == 0 ? 'active-review' : 'review'"
-      >
+      <span @click="changeReview(0)" :class="isReview == 0 ? 'active-review' : 'review'">
         审核中
       </span>
     </div>
     <!-- 表格操作 -->
     <div class="operation-container">
-      <el-button
-        type="danger"
-        size="small"
-        icon="el-icon-delete"
-        :disabled="commentIdList.length == 0"
-        @click="remove = true"
-      >
+      <el-button type="danger" size="small" icon="el-icon-delete" :disabled="commentIdList.length == 0" @click="remove = true">
         批量删除
       </el-button>
-      <el-button
-        type="success"
-        size="small"
-        icon="el-icon-success"
-        :disabled="commentIdList.length == 0"
-        @click="updateCommentReview(null)"
-      >
+      <el-button type="success" size="small" icon="el-icon-success" :disabled="commentIdList.length == 0" @click="updateCommentReview(null)">
         批量通过
       </el-button>
       <!-- 数据筛选 -->
       <div style="margin-left:auto">
-        <el-select
-          clearable
-          v-model="type"
-          placeholder="请选择来源"
-          size="small"
-          style="margin-right:1rem"
-        >
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
+        <el-select clearable v-model="type" placeholder="请选择来源" size="small" style="margin-right:1rem">
+          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
-        <el-input
-          v-model="keywords"
-          prefix-icon="el-icon-search"
-          size="small"
-          placeholder="请输入用户昵称"
-          style="width:200px"
-          @keyup.enter.native="searchComments"
-        />
-        <el-button
-          type="primary"
-          size="small"
-          icon="el-icon-search"
-          style="margin-left:1rem"
-          @click="searchComments"
-        >
+        <el-input v-model="keywords" prefix-icon="el-icon-search" size="small" placeholder="请输入用户昵称" style="width:200px" @keyup.enter.native="searchComments" />
+        <el-button type="primary" size="small" icon="el-icon-search" style="margin-left:1rem" @click="searchComments">
           搜索
         </el-button>
       </div>
     </div>
     <!-- 表格展示 -->
-    <el-table
-      border
-      :data="commentList"
-      @selection-change="selectionChange"
-      v-loading="loading"
-    >
+    <el-table border :data="commentList" @selection-change="selectionChange" v-loading="loading">
       <!-- 表格列 -->
       <el-table-column type="selection" width="55" />
       <el-table-column prop="avatar" label="头像" align="center" width="120">
@@ -92,19 +42,9 @@
         </template>
       </el-table-column>
       <!-- 评论人昵称 -->
-      <el-table-column
-        prop="nickname"
-        label="评论人"
-        align="center"
-        width="120"
-      />
+      <el-table-column prop="nickname" label="评论人" align="center" width="120" />
       <!-- 回复人昵称 -->
-      <el-table-column
-        prop="replyNickname"
-        label="回复人"
-        align="center"
-        width="120"
-      >
+      <el-table-column prop="replyNickname" label="回复人" align="center" width="120">
         <template slot-scope="scope">
           <span v-if="scope.row.replyNickname">
             {{ scope.row.replyNickname }}
@@ -128,15 +68,9 @@
         </template>
       </el-table-column>
       <!-- 评论时间 -->
-      <el-table-column
-        prop="createTime"
-        label="评论时间"
-        width="150"
-        align="center"
-      >
+      <el-table-column prop="createTime" label="评论时间" width="150" align="center">
         <template slot-scope="scope">
-          <i class="el-icon-time" style="margin-right:5px" />
-          {{ scope.row.createTime | date }}
+          <i class="el-icon-time" style="margin-right:5px" /> {{ scope.row.createTime | date }}
         </template>
       </el-table-column>
       <!-- 状态 -->
@@ -157,20 +91,10 @@
       <!-- 列操作 -->
       <el-table-column label="操作" width="160" align="center">
         <template slot-scope="scope">
-          <el-button
-            v-if="scope.row.isReview == 0"
-            size="mini"
-            type="success"
-            slot="reference"
-            @click="updateCommentReview(scope.row.id)"
-          >
+          <el-button v-if="scope.row.isReview == 0" size="mini" type="success" slot="reference" @click="updateCommentReview(scope.row.id)">
             通过
           </el-button>
-          <el-popconfirm
-            style="margin-left:10px"
-            title="确定删除吗？"
-            @confirm="deleteComments(scope.row.id)"
-          >
+          <el-popconfirm style="margin-left:10px" title="确定删除吗？" @confirm="deleteComments(scope.row.id)">
             <el-button size="mini" type="danger" slot="reference">
               删除
             </el-button>
@@ -179,17 +103,7 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination
-      class="pagination-container"
-      background
-      @size-change="sizeChange"
-      @current-change="currentChange"
-      :current-page="current"
-      :page-size="size"
-      :total="count"
-      :page-sizes="[10, 20]"
-      layout="total, sizes, prev, pager, next, jumper"
-    />
+    <el-pagination class="pagination-container" background @size-change="sizeChange" @current-change="currentChange" :current-page="current" :page-size="size" :total="count" :page-sizes="[10, 20]" layout="total, sizes, prev, pager, next, jumper" />
     <!-- 批量彻底删除对话框 -->
     <el-dialog :visible.sync="remove" width="30%">
       <div class="dialog-title-container" slot="title">

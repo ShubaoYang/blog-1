@@ -3,8 +3,8 @@
     <div class="title">{{ this.$route.name }}</div>
     <!-- 文章标题 -->
     <div class="article-title-container">
-      <el-input v-model="article.articleTitle" size="medium" placeholder="输入文章标题" />
-      <el-button type="danger" size="medium" class="save-btn" @click="saveArticleDraft" v-if="article.id == null || article.status == 3">
+      <el-input v-model="question.question" size="medium" placeholder="输入文章标题" />
+      <el-button type="danger" size="medium" class="save-btn" @click="saveQuestionDraft" v-if="question.id == null || question.status == 3">
         保存草稿
       </el-button>
       <el-button type="danger" size="medium" @click="openModel" style="margin-left:10px">
@@ -12,21 +12,21 @@
       </el-button>
     </div>
     <!-- 文章内容 -->
-    <mavon-editor ref="md" v-model="article.articleContent" @imgAdd="uploadImg" style="height:calc(100vh - 260px)" />
+    <mavon-editor ref="md" v-model="question.answer" @imgAdd="uploadImg" style="height:calc(100vh - 260px)" />
     <!-- 添加文章对话框 -->
     <el-dialog :visible.sync="addOrEdit" width="40%" top="3vh">
       <div class="dialog-title-container" slot="title">
         发布文章
       </div>
       <!-- 文章数据 -->
-      <el-form label-width="80px" size="medium" :model="article">
+      <el-form label-width="80px" size="medium" :model="question">
         <!-- 文章分类 -->
         <el-form-item label="文章分类">
-          <el-tag type="success" v-show="article.categoryName" style="margin:0 1rem 0 0" :closable="true" @close="removeCategory">
-            {{ article.categoryName }}
+          <el-tag type="success" v-show="question.categoryName" style="margin:0 1rem 0 0" :closable="true" @close="removeCategory">
+            {{ question.categoryName }}
           </el-tag>
           <!-- 分类选项 -->
-          <el-popover placement="bottom-start" width="460" trigger="click" v-if="!article.categoryName">
+          <el-popover placement="bottom-start" width="460" trigger="click" v-if="!question.categoryName">
             <div class="popover-title">分类</div>
             <!-- 搜索框 -->
             <el-autocomplete style="width:100%" v-model="categoryName" :fetch-suggestions="searchCategories" placeholder="请输入分类名搜索，enter可添加自定义分类" :trigger-on-focus="false" @keyup.enter.native="saveCategory" @select="handleSelectCategories">
@@ -47,11 +47,11 @@
         </el-form-item>
         <!-- 文章标签 -->
         <el-form-item label="文章标签">
-          <el-tag v-for="(item, index) of article.tagNameList" :key="index" style="margin:0 1rem 0 0" :closable="true" @close="removeTag(item)">
+          <el-tag v-for="(item, index) of question.tagNameList" :key="index" style="margin:0 1rem 0 0" :closable="true" @close="removeTag(item)">
             {{ item }}
           </el-tag>
           <!-- 标签选项 -->
-          <el-popover placement="bottom-start" width="460" trigger="click" v-if="article.tagNameList.length < 3">
+          <el-popover placement="bottom-start" width="460" trigger="click" v-if="question.tagNameList.length < 3">
             <div class="popover-title">标签</div>
             <!-- 搜索框 -->
             <el-autocomplete style="width:100%" v-model="tagName" :fetch-suggestions="searchTags" placeholder="请输入标签名搜索，enter可添加自定义标签" :trigger-on-focus="false" @keyup.enter.native="saveTag" @select="handleSelectTag">
@@ -71,38 +71,10 @@
             </el-button>
           </el-popover>
         </el-form-item>
-        <el-form-item label="文章类型">
-          <el-select v-model="article.type" placeholder="请选择类型">
-            <el-option v-for="item in typeList" :key="item.type" :label="item.desc" :value="item.type" />
-          </el-select>
-        </el-form-item>
-        <!-- 文章类型 -->
-        <el-form-item label="原文地址" v-if="article.type != 1">
-          <el-input v-model="article.originalUrl" placeholder="请填写原文链接" />
-        </el-form-item>
-        <el-form-item label="上传封面">
-          <el-upload class="upload-cover" drag action="/api/admin/articles/images" multiple :before-upload="beforeUpload" :on-success="uploadCover">
-            <i class="el-icon-upload" v-if="article.articleCover == ''" />
-            <div class="el-upload__text" v-if="article.articleCover == ''">
-              将文件拖到此处，或
-              <em>点击上传</em>
-            </div>
-            <img v-else :src="article.articleCover" width="360px" height="180px" />
-          </el-upload>
-        </el-form-item>
-        <el-form-item label="置顶">
-          <el-switch v-model="article.isTop" active-color="#13ce66" inactive-color="#F4F4F5" :active-value="1" :inactive-value="0" />
-        </el-form-item>
-        <el-form-item label="发布形式">
-          <el-radio-group v-model="article.status">
-            <el-radio :label="1">公开</el-radio>
-            <el-radio :label="2">私密</el-radio>
-          </el-radio-group>
-        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="addOrEdit = false">取 消</el-button>
-        <el-button type="danger" @click="saveOrUpdateArticle">
+        <el-button type="danger" @click="saveOrUpdateQuestion">
           发 表
         </el-button>
       </div>
@@ -116,21 +88,21 @@ export default {
   created() {
     const path = this.$route.path;
     const arr = path.split("/");
-    const articleId = arr[2];
-    if (articleId) {
-      this.axios.get("/api/admin/articles/" + articleId).then(({ data }) => {
-        this.article = data.data;
+    const questionId = arr[2];
+    if (questionId) {
+      this.axios.get("/api/admin/questions/" + questionId).then(({ data }) => {
+        this.question = data.data;
       });
     } else {
-      const article = sessionStorage.getItem("article");
-      if (article) {
-        this.article = JSON.parse(article);
+      const question = sessionStorage.getItem("question");
+      if (question) {
+        this.question = JSON.parse(question);
       }
     }
   },
   destroyed() {
     //文章自动保存功能
-    this.autoSaveArticle();
+    this.autoSaveQuestion();
   },
   data: function() {
     return {
@@ -140,51 +112,41 @@ export default {
       tagName: "",
       categoryList: [],
       tagList: [],
-      typeList: [
-        {
-          type: 1,
-          desc: "原创"
-        },
-        {
-          type: 2,
-          desc: "转载"
-        },
-        {
-          type: 3,
-          desc: "翻译"
-        }
-      ],
-      article: {
+      question: {
         id: null,
-        articleTitle: this.$moment(new Date()).format("YYYY-MM-DD"),
-        articleContent: "",
-        articleCover: "",
+        question: "",
+        answer: "",
         categoryName: null,
-        tagNameList: [],
-        originalUrl: "",
-        isTop: 0,
-        type: 1,
-        status: 1
+        tagNameList: [""],
       }
     };
   },
   methods: {
+    /**
+      查询分类
+     */
     listCategories() {
       this.axios.get("/api/admin/categories/search").then(({ data }) => {
         this.categoryList = data.data;
       });
     },
+    /**
+      查询标签
+     */
     listTags() {
       this.axios.get("/api/admin/tags/search").then(({ data }) => {
         this.tagList = data.data;
       });
     },
+    /**
+      发布文章
+     */
     openModel() {
-      if (this.article.articleTitle.trim() == "") {
+      if (this.question.question.trim() == "") {
         this.$message.error("文章标题不能为空");
         return false;
       }
-      if (this.article.articleContent.trim() == "") {
+      if (this.question.answer.trim() == "") {
         this.$message.error("文章内容不能为空");
         return false;
       }
@@ -192,59 +154,23 @@ export default {
       this.listTags();
       this.addOrEdit = true;
     },
-    uploadCover(response) {
-      this.article.articleCover = response.data;
-    },
-    beforeUpload(file) {
-      return new Promise(resolve => {
-        if (file.size / 1024 < this.config.UPLOAD_SIZE) {
-          resolve(file);
-        }
-        // 压缩到200KB,这里的200就是要压缩的大小,可自定义
-        imageConversion
-          .compressAccurately(file, this.config.UPLOAD_SIZE)
-          .then(res => {
-            resolve(res);
-          });
-      });
-    },
-    uploadImg(pos, file) {
-      var formdata = new FormData();
-      if (file.size / 1024 < this.config.UPLOAD_SIZE) {
-        formdata.append("file", file);
-        this.axios
-          .post("/api/admin/articles/images", formdata)
-          .then(({ data }) => {
-            this.$refs.md.$img2Url(pos, data.data);
-          });
-      } else {
-        // 压缩到200KB,这里的200就是要压缩的大小,可自定义
-        imageConversion
-          .compressAccurately(file, this.config.UPLOAD_SIZE)
-          .then(res => {
-            formdata.append(
-              "file",
-              new window.File([res], file.name, { type: file.type })
-            );
-            this.axios
-              .post("/api/admin/articles/images", formdata)
-              .then(({ data }) => {
-                this.$refs.md.$img2Url(pos, data.data);
-              });
-          });
-      }
-    },
-    saveArticleDraft() {
-      if (this.article.articleTitle.trim() == "") {
+
+
+
+    /**
+    草稿箱
+     */
+    saveQuestionDraft() {
+      if (this.question.question.trim() == "") {
         this.$message.error("文章标题不能为空");
         return false;
       }
-      if (this.article.articleContent.trim() == "") {
+      if (this.question.answer.trim() == "") {
         this.$message.error("文章内容不能为空");
         return false;
       }
-      this.article.status = 3;
-      this.axios.post("/api/admin/articles", this.article).then(({ data }) => {
+      this.question.status = 3;
+      this.axios.post("/api/admin/questions", this.question).then(({ data }) => {
         if (data.flag) {
           this.$notify.success({
             title: "成功",
@@ -260,28 +186,29 @@ export default {
       //关闭自动保存功能
       this.autoSave = false;
     },
-    saveOrUpdateArticle() {
-      if (this.article.articleTitle.trim() == "") {
+    /**
+    保存问答
+     */
+    saveOrUpdateQuestion() {
+      console.log(this.question);
+      if (this.question.question.trim() == "") {
         this.$message.error("文章标题不能为空");
         return false;
       }
-      if (this.article.articleContent.trim() == "") {
+      if (this.question.answer.trim() == "") {
         this.$message.error("文章内容不能为空");
         return false;
       }
-      if (this.article.categoryName == null) {
+      if (this.question.categoryName == null) {
         this.$message.error("文章分类不能为空");
         return false;
       }
-      if (this.article.tagNameList.length == 0) {
+      if (this.question.tagNameList.length == 0) {
         this.$message.error("文章标签不能为空");
         return false;
       }
-      if (this.article.articleCover.trim() == "") {
-        this.$message.error("文章封面不能为空");
-        return false;
-      }
-      this.axios.post("/api/admin/articles", this.article).then(({ data }) => {
+
+      this.axios.post("/api/admin/questions", this.question).then(({ data }) => {
         if (data.flag) {
           this.$notify.success({
             title: "成功",
@@ -298,35 +225,7 @@ export default {
       //关闭自动保存功能
       this.autoSave = false;
     },
-    autoSaveArticle() {
-      // 自动上传文章
-      if (
-        this.autoSave &&
-        this.article.articleTitle.trim() != "" &&
-        this.article.articleContent.trim() != "" &&
-        this.article.id != null
-      ) {
-        this.axios
-          .post("/api/admin/articles", this.article)
-          .then(({ data }) => {
-            if (data.flag) {
-              this.$notify.success({
-                title: "成功",
-                message: "自动保存成功"
-              });
-            } else {
-              this.$notify.error({
-                title: "失败",
-                message: "自动保存失败"
-              });
-            }
-          });
-      }
-      // 保存本地文章记录
-      if (this.autoSave && this.article.id == null) {
-        sessionStorage.setItem("article", JSON.stringify(this.article));
-      }
-    },
+    
     searchCategories(keywords, cb) {
       this.axios
         .get("/api/admin/categories/search", {
@@ -352,10 +251,10 @@ export default {
       }
     },
     addCategory(item) {
-      this.article.categoryName = item.categoryName;
+      this.question.categoryName = item.categoryName;
     },
     removeCategory() {
-      this.article.categoryName = null;
+      this.question.categoryName = null;
     },
     searchTags(keywords, cb) {
       this.axios
@@ -382,19 +281,19 @@ export default {
       }
     },
     addTag(item) {
-      if (this.article.tagNameList.indexOf(item.tagName) == -1) {
-        this.article.tagNameList.push(item.tagName);
+      if (this.question.tagNameList.indexOf(item.tagName) == -1) {
+        this.question.tagNameList.push(item.tagName);
       }
     },
     removeTag(item) {
-      const index = this.article.tagNameList.indexOf(item);
-      this.article.tagNameList.splice(index, 1);
+      const index = this.question.tagNameList.indexOf(item);
+      this.question.tagNameList.splice(index, 1);
     }
   },
   computed: {
     tagClass() {
       return function(item) {
-        const index = this.article.tagNameList.indexOf(item.tagName);
+        const index = this.question.tagNameList.indexOf(item.tagName);
         return index != -1 ? "tag-item-select" : "tag-item";
       };
     }

@@ -58,10 +58,7 @@
     <el-card style="margin-top:1.25rem">
       <div class="e-title">文章贡献统计</div>
       <div v-loading="loading">
-        <calendar-heatmap
-          :end-date="new Date()"
-          :values="articleStatisticsList"
-        />
+        <calendar-heatmap :end-date="new Date()" :values="articleStatisticsList" />
       </div>
     </el-card>
     <el-row :gutter="20" style="margin-top:1.25rem">

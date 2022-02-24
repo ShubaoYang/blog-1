@@ -24,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 
+import static com.minzheng.blog.enums.ArticleStatusEnum.DRAFT;
+
 
 /**
  * 分类服务
@@ -94,4 +96,15 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, Category> impl
         this.saveOrUpdate(category);
     }
 
+    @Override
+    public Category saveOrUpdateCategory(String categoryName) {
+        // 判断分类是否存在
+        Category category = categoryDao.selectOne(new LambdaQueryWrapper<Category>()
+                .eq(Category::getCategoryName, categoryName));
+        if (Objects.isNull(category)) {
+            category = Category.builder().categoryName(categoryName).build();
+            categoryDao.insert(category);
+        }
+        return category;
+    }
 }
