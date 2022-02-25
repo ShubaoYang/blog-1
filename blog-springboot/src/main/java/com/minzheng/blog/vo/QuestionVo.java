@@ -1,8 +1,11 @@
 package com.minzheng.blog.vo;
 
+import com.minzheng.blog.dto.TagDTO;
 import com.minzheng.blog.entity.Question;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
+
+import java.util.List;
 
 /**
  * @author shubao
@@ -15,5 +18,7 @@ import lombok.*;
 public class QuestionVo extends Question {
 
     private String categoryName;
+
+    private List<TagDTO> tags;
 
 }

@@ -22,4 +22,12 @@ public interface QuestionService extends IService<Question> {
      * @param questionVo 问答
      */
     void saveOrUpdateQuestion(QuestionVo questionVo);
+
+    /**
+     * 后台查询问答列表
+     * @param condition
+     * @return
+     */
+    PageResult<QuestionVo> listQuestionBacks(ConditionVO condition);
+
 }

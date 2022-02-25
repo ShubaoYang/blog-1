@@ -11,8 +11,60 @@
         <result column="update_time" property="updateTime"/>
         <result column="category_id" property="categoryId"/>
         <result column="is_delete" property="isDelete"/>
+        <result column="category_name" property="categoryName"/>
+        <collection property="tags" ofType="com.minzheng.blog.dto.TagDTO">
+            <id column="tag_id" property="id"/>
+            <result column="tag_name" property="tagName"/>
+        </collection>
     </resultMap>
 
+
+    <select id="countQuestionBacks" resultType="java.lang.Integer">
+        SELECT
+        count(DISTINCT a.id)
+        from
+        tb_question a
+        LEFT JOIN tb_question_tag tat on a.id = tat.question_id
+        <where>
+            <if test="condition.isDelete != null">
+                and is_delete = #{condition.isDelete}
+            </if>
+            <if test="condition.keywords != null">
+                and question like concat('%',#{condition.keywords},'%')
+            </if>
+            <if test="condition.categoryId != null">
+                and category_id = #{condition.categoryId}
+            </if>
+            <if test="condition.tagId != null">
+                and tat.tag_id = #{condition.tagId}
+            </if>
+        </where>
+    </select>
+
+    <select id="listQuestionBacks" resultType="com.minzheng.blog.dto.QuestionDTO">
+        SELECT
+        tq.id,tq.user_id,tq.question,tq.answer,tq.create_time,tq.update_time,tq.category_id,tq.is_delete,
+               c.category_name
+        FROM
+        tb_question tq left join tb_category c ON tq.category_id = c.id
+        <where>
+            <if test="condition.isDelete != null">
+                and is_delete = #{condition.isDelete}
+            </if>
+            <if test="condition.keywords != null">
+                and question like concat('%',#{condition.keywords},'%')
+            </if>
+            <if test="condition.categoryId != null">
+                and category_id = #{condition.categoryId}
+            </if>
+            <if test="condition.tagId != null">
+                and tat.tag_id = #{condition.tagId}
+            </if>
+        </where>
+        ORDER BY
+        id DESC
+        LIMIT #{current} , #{size}
+    </select>
 
 
 </mapper>

@@ -3,12 +3,12 @@
     <div class="title">{{ this.$route.name }}</div>
     <!-- 文章标题 -->
     <div class="article-title-container">
-      <el-input v-model="question.question" size="medium" placeholder="输入文章标题" />
+      <el-input v-model="question.question" size="medium" placeholder="题目" />
       <el-button type="danger" size="medium" class="save-btn" @click="saveQuestionDraft" v-if="question.id == null || question.status == 3">
         保存草稿
       </el-button>
       <el-button type="danger" size="medium" @click="openModel" style="margin-left:10px">
-        发布文章
+        发布问答
       </el-button>
     </div>
     <!-- 文章内容 -->
@@ -16,7 +16,7 @@
     <!-- 添加文章对话框 -->
     <el-dialog :visible.sync="addOrEdit" width="40%" top="3vh">
       <div class="dialog-title-container" slot="title">
-        发布文章
+        发布问答
       </div>
       <!-- 文章数据 -->
       <el-form label-width="80px" size="medium" :model="question">
@@ -83,7 +83,6 @@
 </template>
 
 <script>
-import * as imageConversion from "image-conversion";
 export default {
   created() {
     const path = this.$route.path;

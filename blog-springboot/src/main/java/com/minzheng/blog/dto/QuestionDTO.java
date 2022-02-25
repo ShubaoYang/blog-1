@@ -59,4 +59,8 @@ public class QuestionDTO {
 
     private Integer isDelete;
 
+    private String categoryName;
+
+    private List<TagDTO> tags;
+
 }

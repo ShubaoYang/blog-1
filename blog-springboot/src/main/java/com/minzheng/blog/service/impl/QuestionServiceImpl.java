@@ -1,34 +1,20 @@
 package com.minzheng.blog.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.minzheng.blog.dao.*;
 import com.minzheng.blog.dto.*;
 import com.minzheng.blog.entity.*;
-import com.minzheng.blog.exception.BizException;
 import com.minzheng.blog.service.*;
-import com.minzheng.blog.strategy.context.SearchStrategyContext;
 import com.minzheng.blog.util.BeanCopyUtils;
 import com.minzheng.blog.util.PageUtils;
 import com.minzheng.blog.util.UserUtils;
 import com.minzheng.blog.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpSession;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
-import static com.minzheng.blog.constant.CommonConst.ARTICLE_SET;
-import static com.minzheng.blog.constant.CommonConst.FALSE;
 import static com.minzheng.blog.constant.RedisPrefixConst.*;
-import static com.minzheng.blog.enums.ArticleStatusEnum.DRAFT;
-import static com.minzheng.blog.enums.ArticleStatusEnum.PUBLIC;
 
 
 /**
@@ -42,6 +28,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionDao, Question> impl
 
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private QuestionDao questionDao;
 
 
     @Override
@@ -59,7 +47,21 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionDao, Question> impl
 //        saveQuestionTag(questionVo, question.getId());
     }
 
-//    private void saveQuestionTag(QuestionVo questionVo, Integer id) {
+    @Override
+    public PageResult<QuestionVo> listQuestionBacks(ConditionVO condition) {
+        // 查询文章总量
+        Integer count = questionDao.countQuestionBacks(condition);
+        if (count == 0) {
+            return new PageResult<>();
+        }
+        // 查询后台文章
+        List<QuestionDTO> questions = questionDao.listQuestionBacks(PageUtils.getLimitCurrent(), PageUtils.getSize(), condition);
+
+        List<QuestionVo> questionVo = BeanCopyUtils.copyList(questions, QuestionVo.class);
+        return new PageResult<QuestionVo>(questionVo, count);
+    }
+
+    //    private void saveQuestionTag(QuestionVo questionVo, Integer id) {
 //        // 编辑文章则删除文章所有标签
 //        if (Objects.nonNull(questionVo.getId())) {
 //            articleTagDao.delete(new LambdaQueryWrapper<ArticleTag>()

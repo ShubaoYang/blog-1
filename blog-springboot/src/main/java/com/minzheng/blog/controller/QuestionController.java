@@ -71,17 +71,17 @@ public class QuestionController {
 //        return Result.ok(articleService.listArticles());
 //    }
 //
-//    /**
-//     * 查看后台文章
-//     *
-//     * @param conditionVO 条件
-//     * @return {@link Result<ArticleBackDTO>} 后台文章列表
-//     */
-//    @ApiOperation(value = "查看后台文章")
-//    @GetMapping("/admin/articles")
-//    public Result<PageResult<ArticleBackDTO>> listArticleBacks(ConditionVO conditionVO) {
-//        return Result.ok(articleService.listArticleBacks(conditionVO));
-//    }
+    /**
+     * 查看后台文章
+     *
+     * @param conditionVO 条件
+     * @return {@link Result<ArticleBackDTO>} 后台文章列表
+     */
+    @ApiOperation(value = "后台查看问答")
+    @GetMapping("/admin/questions")
+    public Result<PageResult<QuestionVo>> listQuestionBacks(ConditionVO conditionVO) {
+        return Result.ok(questionService.listQuestionBacks(conditionVO));
+    }
 //
 //    /**
 //     * 修改文章置顶状态
