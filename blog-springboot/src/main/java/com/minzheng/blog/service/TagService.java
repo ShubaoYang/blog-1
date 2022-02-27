@@ -55,4 +55,11 @@ public interface TagService extends IService<Tag> {
      */
     void saveOrUpdateTag(TagVO tagVO);
 
+    /**
+     * 保存不存在的标签
+     * @param tagNames 标签名称
+     * @return 标签Id
+     */
+    List<Integer> insertNotExistTags(List<String> tagNames);
+
 }

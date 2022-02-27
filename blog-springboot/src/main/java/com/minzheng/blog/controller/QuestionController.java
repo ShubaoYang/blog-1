@@ -138,18 +138,18 @@ public class QuestionController {
 //        return Result.ok();
 //    }
 //
-//    /**
-//     * 根据id查看后台文章
-//     *
-//     * @param articleId 文章id
-//     * @return {@link Result<ArticleVO>} 后台文章
-//     */
-//    @ApiOperation(value = "根据id查看后台文章")
-//    @ApiImplicitParam(name = "articleId", value = "文章id", required = true, dataType = "Integer")
-//    @GetMapping("/admin/articles/{articleId}")
-//    public Result<ArticleVO> getArticleBackById(@PathVariable("articleId") Integer articleId) {
-//        return Result.ok(articleService.getArticleBackById(articleId));
-//    }
+    /**
+     * 根据id查看后台文章
+     *
+     * @param questionId 文章id
+     * @return {@link Result<ArticleVO>} 后台文章
+     */
+    @ApiOperation(value = "根据id查看后台问答")
+    @ApiImplicitParam(name = "questionId", value = "问答id", required = true, dataType = "Integer")
+    @GetMapping("/admin/questions/{questionId}")
+    public Result<QuestionVo> getArticleBackById(@PathVariable("questionId") Integer questionId) {
+        return Result.ok(questionService.getQuestionBackById(questionId));
+    }
 //
 //    /**
 //     * 根据id查看文章

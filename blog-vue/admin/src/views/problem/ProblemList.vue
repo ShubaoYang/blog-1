@@ -38,7 +38,7 @@
       <!-- 文章分类 -->
       <el-table-column prop="categoryName" label="分类" width="110" align="center" />
       <!-- 文章标签 -->
-      <el-table-column prop="tags" label="标签" width="170" align="center">
+      <el-table-column prop="tags" label="标签" width="400" align="center">
         <template slot-scope="scope">
           <el-tag v-for="item of scope.row.tags" :key="item.tagId" style="margin-right:0.2rem;margin-top:0.2rem">
             {{ item.tagName }}
@@ -47,7 +47,7 @@
       </el-table-column>
       
       <!-- 文章发表时间 -->
-      <el-table-column prop="createTime" label="发表时间" width="130" align="center">
+      <el-table-column prop="createTime" label="发表时间" width="150" align="center">
         <template slot-scope="scope">
           <i class="el-icon-time" style="margin-right:5px" /> {{ scope.row.createTime | date }}
         </template>
@@ -146,7 +146,7 @@ export default {
       this.listQuestions();
     },
     editQuestion(id) {
-      this.$router.push({ path: "/questions/" + id });
+      this.$router.push({ path: "/problems/" + id });
     },
     updateQuestionDelete(id) {
       let param = {};

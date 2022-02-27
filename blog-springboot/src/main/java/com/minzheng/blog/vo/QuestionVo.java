@@ -19,6 +19,8 @@ public class QuestionVo extends Question {
 
     private String categoryName;
 
+    private List<String> tagNameList;
+
     private List<TagDTO> tags;
 
 }

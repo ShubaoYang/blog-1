@@ -30,4 +30,5 @@ public interface QuestionService extends IService<Question> {
      */
     PageResult<QuestionVo> listQuestionBacks(ConditionVO condition);
 
+    QuestionVo getQuestionBackById(Integer questionId);
 }

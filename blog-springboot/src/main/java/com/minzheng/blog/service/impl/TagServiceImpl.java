@@ -1,6 +1,7 @@
 package com.minzheng.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.minzheng.blog.dao.ArticleTagDao;
 import com.minzheng.blog.dto.TagBackDTO;
@@ -20,8 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 标签服务
@@ -93,6 +96,33 @@ public class TagServiceImpl extends ServiceImpl<TagDao, Tag> implements TagServi
         }
         Tag tag = BeanCopyUtils.copyObject(tagVO, Tag.class);
         this.saveOrUpdate(tag);
+    }
+
+    @Override
+    public List<Integer> insertNotExistTags(List<String> tagNames) {
+        // 查询已存在的标签
+        List<Tag> existTagList = this.list(new LambdaQueryWrapper<Tag>()
+                .in(Tag::getTagName, tagNames));
+        List<String> existTagNameList = existTagList.stream()
+                .map(Tag::getTagName)
+                .collect(Collectors.toList());
+        List<Integer> existTagIdList = existTagList.stream()
+                .map(Tag::getId)
+                .collect(Collectors.toList());
+        // 对比新增不存在的标签
+        tagNames.removeAll(existTagNameList);
+        if (CollectionUtils.isNotEmpty(tagNames)) {
+            List<Tag> tagList = tagNames.stream().map(item -> Tag.builder()
+                    .tagName(item)
+                    .build())
+                    .collect(Collectors.toList());
+            this.saveBatch(tagList);
+            List<Integer> tagIdList = tagList.stream()
+                    .map(Tag::getId)
+                    .collect(Collectors.toList());
+            existTagIdList.addAll(tagIdList);
+        }
+        return existTagIdList;
     }
 
 }

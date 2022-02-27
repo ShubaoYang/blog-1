@@ -1,5 +1,7 @@
 package com.minzheng.blog.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.minzheng.blog.dao.*;
 import com.minzheng.blog.dto.*;
@@ -13,8 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-
-import static com.minzheng.blog.constant.RedisPrefixConst.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -30,6 +31,12 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionDao, Question> impl
     private CategoryService categoryService;
     @Autowired
     private QuestionDao questionDao;
+    @Autowired
+    private QuestionTagDao questionTagDao;
+    @Autowired
+    private QuestionTagService questionTagService;
+    @Autowired
+    private TagService tagService;
 
 
     @Override
@@ -43,8 +50,33 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionDao, Question> impl
         }
         question.setUserId(UserUtils.getLoginUser().getUserInfoId());
         this.saveOrUpdate(question);
-        // 保存文章标签
-//        saveQuestionTag(questionVo, question.getId());
+
+        saveQuestionTag(questionVo, question.getId());
+    }
+
+    /**
+     * 保存文章标签
+     * @param questionVo 问答
+     * @param questionId 问答ID
+     */
+    private void saveQuestionTag(QuestionVo questionVo, Integer questionId) {
+        // 编辑文章则删除文章所有标签
+        if (Objects.nonNull(questionVo.getId())) {
+            questionTagDao.delete(new LambdaQueryWrapper<QuestionTag>()
+                    .eq(QuestionTag::getQuestionId, questionVo.getId()));
+        }
+        // 添加文章标签
+        List<String> tagNames = questionVo.getTagNameList();
+        if (CollectionUtils.isNotEmpty(tagNames)) {
+            List<Integer> tagIds = tagService.insertNotExistTags(tagNames);
+            // 提取标签id绑定文章
+            List<QuestionTag> questionTags = tagIds.stream().map(tagId -> QuestionTag.builder()
+                    .questionId(questionId)
+                    .tagId(tagId)
+                    .build())
+                    .collect(Collectors.toList());
+            questionTagService.saveBatch(questionTags);
+        }
     }
 
     @Override
@@ -56,9 +88,18 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionDao, Question> impl
         }
         // 查询后台文章
         List<QuestionDTO> questions = questionDao.listQuestionBacks(PageUtils.getLimitCurrent(), PageUtils.getSize(), condition);
-
         List<QuestionVo> questionVo = BeanCopyUtils.copyList(questions, QuestionVo.class);
-        return new PageResult<QuestionVo>(questionVo, count);
+        questionVo.forEach(question-> question.setTags(questionTagService.getTagsByQuestionId(question.getId())));
+        return new PageResult<>(questionVo, count);
+    }
+
+    @Override
+    public QuestionVo getQuestionBackById(Integer questionId) {
+//        Question question = questionDao.selectById(questionId);
+        QuestionDTO questionDTO = questionDao.getQuestionById(questionId);
+        QuestionVo questionVo = BeanCopyUtils.copyObject(questionDTO, QuestionVo.class);
+        questionVo.setTagNameList(questionTagService.getTagNamesByQuestionId(questionId));
+        return questionVo;
     }
 
     //    private void saveQuestionTag(QuestionVo questionVo, Integer id) {

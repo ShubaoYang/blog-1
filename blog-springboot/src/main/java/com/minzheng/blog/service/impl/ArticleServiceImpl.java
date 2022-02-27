@@ -275,32 +275,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, Article> impleme
         // 添加文章标签
         List<String> tagNameList = articleVO.getTagNameList();
         if (CollectionUtils.isNotEmpty(tagNameList)) {
-            // 查询已存在的标签
-            List<Tag> existTagList = tagService.list(new LambdaQueryWrapper<Tag>()
-                    .in(Tag::getTagName, tagNameList));
-            List<String> existTagNameList = existTagList.stream()
-                    .map(Tag::getTagName)
-                    .collect(Collectors.toList());
-            List<Integer> existTagIdList = existTagList.stream()
-                    .map(Tag::getId)
-                    .collect(Collectors.toList());
-            // 对比新增不存在的标签
-            tagNameList.removeAll(existTagNameList);
-            if (CollectionUtils.isNotEmpty(tagNameList)) {
-                List<Tag> tagList = tagNameList.stream().map(item -> Tag.builder()
-                                .tagName(item)
-                                .build())
-                        .collect(Collectors.toList());
-                tagService.saveBatch(tagList);
-                List<Integer> tagIdList = tagList.stream()
-                        .map(Tag::getId)
-                        .collect(Collectors.toList());
-                existTagIdList.addAll(tagIdList);
-            }
+            List<Integer> tagIds = tagService.insertNotExistTags(tagNameList);
+
             // 提取标签id绑定文章
-            List<ArticleTag> articleTagList = existTagIdList.stream().map(item -> ArticleTag.builder()
+            List<ArticleTag> articleTagList = tagIds.stream().map(tagId -> ArticleTag.builder()
                             .articleId(articleId)
-                            .tagId(item)
+                            .tagId(tagId)
                             .build())
                     .collect(Collectors.toList());
             articleTagService.saveBatch(articleTagList);

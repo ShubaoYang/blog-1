@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.minzheng.blog.dao.QuestionTagDao">
+  <resultMap id="BaseResultMap" type="com.minzheng.blog.entity.QuestionTag">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="question_id" jdbcType="INTEGER" property="questionId" />
+    <result column="tag_id" jdbcType="INTEGER" property="tagId" />
+  </resultMap>
+  <resultMap id="QuestionTagDtoMap" type="com.minzheng.blog.dto.QuestionTagDTO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="question_id" jdbcType="INTEGER" property="questionId" />
+    <result column="tag_id" jdbcType="INTEGER" property="tagId" />
+    <result column="tag_name" jdbcType="VARCHAR" property="tagName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, question_id, tag_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_question_tag
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectTagIdsByQuestionId" parameterType="java.lang.Integer" resultMap="QuestionTagDtoMap">
+    select
+    tqt.question_id,tqt.tag_id,tt.tag_name
+    from tb_question_tag tqt
+    left join tb_tag tt on tqt.tag_id = tt.id
+    where question_id = #{questionId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_question_tag
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.minzheng.blog.entity.QuestionTag" useGeneratedKeys="true">
+    insert into tb_question_tag (question_id, tag_id)
+    values (#{questionId,jdbcType=INTEGER}, #{tagId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.minzheng.blog.entity.QuestionTag" useGeneratedKeys="true">
+    insert into tb_question_tag
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="questionId != null">
+        question_id,
+      </if>
+      <if test="tagId != null">
+        tag_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="questionId != null">
+        #{questionId,jdbcType=INTEGER},
+      </if>
+      <if test="tagId != null">
+        #{tagId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.minzheng.blog.entity.QuestionTag">
+    update tb_question_tag
+    <set>
+      <if test="questionId != null">
+        question_id = #{questionId,jdbcType=INTEGER},
+      </if>
+      <if test="tagId != null">
+        tag_id = #{tagId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.minzheng.blog.entity.QuestionTag">
+    update tb_question_tag
+    set question_id = #{questionId,jdbcType=INTEGER},
+      tag_id = #{tagId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -65,6 +65,14 @@
         id DESC
         LIMIT #{current} , #{size}
     </select>
+    <select id="getQuestionById" resultType="com.minzheng.blog.dto.QuestionDTO">
+        SELECT
+        tq.id,tq.user_id,tq.question,tq.answer,tq.create_time,tq.update_time,tq.category_id,tq.is_delete,
+        c.category_name
+        FROM
+        tb_question tq left join tb_category c ON tq.category_id = c.id
+        where tq.id = #{questionId}
+    </select>
 
 
 </mapper>

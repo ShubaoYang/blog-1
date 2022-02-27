@@ -45,13 +45,13 @@ public interface QuestionDao extends BaseMapper<Question> {
      */
 //    List<QuestionDTO> listQuestions(@Param("current") Long current, @Param("size") Long size);
 //
-//    /**
-//     * 根据id查询文章
-//     *
-//     * @param articleId 文章id
-//     * @return 文章信息
-//     */
-//    QuestionDTO getQuestionById(@Param("questionId") Integer questionId);
+    /**
+     * 根据id查询问答
+     *
+     * @param questionId 文章id
+     * @return 问答信息
+     */
+    QuestionDTO getQuestionById(@Param("questionId") Integer questionId);
 //
 //    /**
 //     * 根据条件查询文章

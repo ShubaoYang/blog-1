@@ -12,7 +12,7 @@
       </el-button>
     </div>
     <!-- 文章内容 -->
-    <mavon-editor ref="md" v-model="question.answer" @imgAdd="uploadImg" style="height:calc(100vh - 260px)" />
+    <mavon-editor ref="md" v-model="question.answer" style="height:calc(100vh - 260px)" />
     <!-- 添加文章对话框 -->
     <el-dialog :visible.sync="addOrEdit" width="40%" top="3vh">
       <div class="dialog-title-container" slot="title">
@@ -116,7 +116,7 @@ export default {
         question: "",
         answer: "",
         categoryName: null,
-        tagNameList: [""],
+        tagNameList: [],
       }
     };
   },
@@ -153,7 +153,35 @@ export default {
       this.listTags();
       this.addOrEdit = true;
     },
-
+    autoSaveQuestion() {
+      // 自动上传文章
+      if (
+        this.autoSave &&
+        this.question.question.trim() != "" &&
+        this.question.answer.trim() != "" &&
+        this.question.id != null
+      ) {
+        this.axios
+          .post("/api/admin/questions", this.question)
+          .then(({ data }) => {
+            if (data.flag) {
+              this.$notify.success({
+                title: "成功",
+                message: "自动保存成功"
+              });
+            } else {
+              this.$notify.error({
+                title: "失败",
+                message: "自动保存失败"
+              });
+            }
+          });
+      }
+      // 保存本地文章记录
+      if (this.autoSave && this.question.id == null) {
+        sessionStorage.setItem("question", JSON.stringify(this.question));
+      }
+    },
 
 
     /**
@@ -213,6 +241,7 @@ export default {
             title: "成功",
             message: data.message
           });
+          sessionStorage.removeItem("question");
         } else {
           this.$notify.error({
             title: "失败",
