@@ -40,6 +40,11 @@ public enum StatusCodeEnum {
      * 用户名不存在
      */
     USERNAME_NOT_EXIST(52002, "用户名不存在"),
+
+    /**
+     * 用户未登录
+     */
+    UN_LOGIN_ERROR(53000,"用户未登录"),
     /**
      * qq登录错误
      */

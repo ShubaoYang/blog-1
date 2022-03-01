@@ -83,6 +83,13 @@ axios.interceptors.response.use(
           message: response.data.message
         });
         break;
+      case 53000:
+      // Vue.prototype.$message({
+      //   type: "error",
+      //   message: response.data.message
+      // });
+      router.push({ path: "/login" });
+      break;
     }
     return response;
   },

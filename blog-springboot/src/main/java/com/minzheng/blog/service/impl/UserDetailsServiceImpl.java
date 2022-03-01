@@ -44,6 +44,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Resource
     private HttpServletRequest request;
 
+    /**
+     * 自定义登录实现
+     * @param username
+     * @return
+     */
     @Override
     public UserDetails loadUserByUsername(String username) {
         if (StringUtils.isBlank(username)) {
