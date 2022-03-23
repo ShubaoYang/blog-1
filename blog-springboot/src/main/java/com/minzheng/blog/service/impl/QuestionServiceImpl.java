@@ -38,6 +38,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionDao, Question> impl
     @Autowired
     private TagService tagService;
 
+    public static final int BATCH_QUESTION_NUMBER = 10;
+
 
     @Override
     public void saveOrUpdateQuestion(QuestionVo questionVo) {
@@ -56,6 +58,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionDao, Question> impl
 
     /**
      * 保存文章标签
+     *
      * @param questionVo 问答
      * @param questionId 问答ID
      */
@@ -89,7 +92,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionDao, Question> impl
         // 查询后台文章
         List<QuestionDTO> questions = questionDao.listQuestionBacks(PageUtils.getLimitCurrent(), PageUtils.getSize(), condition);
         List<QuestionVo> questionVo = BeanCopyUtils.copyList(questions, QuestionVo.class);
-        questionVo.forEach(question-> question.setTags(questionTagService.getTagsByQuestionId(question.getId())));
+        questionVo.forEach(question -> question.setTags(questionTagService.getTagsByQuestionId(question.getId())));
         return new PageResult<>(questionVo, count);
     }
 
@@ -99,6 +102,13 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionDao, Question> impl
         QuestionDTO questionDTO = questionDao.getQuestionById(questionId);
         QuestionVo questionVo = BeanCopyUtils.copyObject(questionDTO, QuestionVo.class);
         questionVo.setTagNameList(questionTagService.getTagNamesByQuestionId(questionId));
+        return questionVo;
+    }
+
+    @Override
+    public List<QuestionVo> getQuestionsBatch() {
+        List<QuestionDTO> questions = questionDao.getBatchQuestions(BATCH_QUESTION_NUMBER);
+        List<QuestionVo> questionVo = BeanCopyUtils.copyList(questions, QuestionVo.class);
         return questionVo;
     }
 

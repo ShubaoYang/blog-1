@@ -74,5 +74,17 @@
         where tq.id = #{questionId}
     </select>
 
+    <select id="getBatchQuestions" resultType="com.minzheng.blog.dto.QuestionDTO">
+        SELECT
+            tq.id,tq.user_id,tq.question,tq.answer,tq.create_time,tq.category_id,
+            c.category_name
+        FROM
+            tb_question tq left join tb_category c ON tq.category_id = c.id
+        ORDER BY
+            RAND()
+        LIMIT
+            #{size}
+    </select>
+
 
 </mapper>

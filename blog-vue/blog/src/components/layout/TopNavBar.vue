@@ -36,7 +36,7 @@
         </div>
         <div class="menus-item">
           <a class="menu-btn">
-            <i class="iconfont iconfaxian" /> 发现
+            <i class="iconfont iconfaxian" /> 文章
             <i class="iconfont iconxiangxia2 expand" />
           </a>
           <ul class="menus-submenu">
@@ -56,6 +56,11 @@
               </router-link>
             </li>
           </ul>
+        </div>
+         <div class="menus-item">
+          <router-link class="menu-btn" to="/questions">
+            <i class="iconfont iconlianjie" /> 问答
+          </router-link>
         </div>
         <div class="menus-item">
           <a class="menu-btn">

@@ -59,6 +59,13 @@ const routes = [
     }
   },
   {
+    path: "/questions",
+    component: resolve => require(["../views/question/Question.vue"], resolve),
+    meta: {
+      title: "问答"
+    }
+  },
+  {
     path: "/categories/:categoryId",
     component: resolve => require(["../views/article/ArticleList.vue"], resolve)
   },

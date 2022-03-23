@@ -5,6 +5,7 @@ import com.minzheng.blog.dto.*;
 import com.minzheng.blog.entity.Article;
 import com.minzheng.blog.entity.Question;
 import com.minzheng.blog.vo.ConditionVO;
+import com.minzheng.blog.vo.QuestionVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -52,6 +53,8 @@ public interface QuestionDao extends BaseMapper<Question> {
      * @return 问答信息
      */
     QuestionDTO getQuestionById(@Param("questionId") Integer questionId);
+
+    List<QuestionDTO> getBatchQuestions(@Param("size") Integer size);
 //
 //    /**
 //     * 根据条件查询文章

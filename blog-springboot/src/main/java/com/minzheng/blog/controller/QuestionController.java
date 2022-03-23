@@ -48,6 +48,44 @@ public class QuestionController {
         return Result.ok();
     }
 
+    /**
+     * 查看后台文章
+     *
+     * @param conditionVO 条件
+     * @return {@link Result<ArticleBackDTO>} 后台文章列表
+     */
+    @ApiOperation(value = "后台查看问答")
+    @GetMapping("/admin/questions")
+    public Result<PageResult<QuestionVo>> listQuestionBacks(ConditionVO conditionVO) {
+        return Result.ok(questionService.listQuestionBacks(conditionVO));
+    }
+
+    /**
+     * 根据id查看后台文章
+     *
+     * @param questionId 文章id
+     * @return {@link Result<ArticleVO>} 后台文章
+     */
+    @ApiOperation(value = "根据id查看后台问答")
+    @ApiImplicitParam(name = "questionId", value = "问答id", required = true, dataType = "Integer")
+    @GetMapping("/admin/questions/{questionId}")
+    public Result<QuestionVo> getArticleBackById(@PathVariable("questionId") Integer questionId) {
+        return Result.ok(questionService.getQuestionBackById(questionId));
+    }
+
+    /**
+     * 根据id查看后台文章
+     *
+     * @return {@link Result<List<QuestionVo>>} 随机返回10道题
+     */
+    @ApiOperation(value = "批次获取问题")
+    @GetMapping("/questions/batch")
+    public Result<List<QuestionVo>> getQuestionsBatch() {
+        return Result.ok(questionService.getQuestionsBatch());
+    }
+
+
+
 //
 //    /**
 //     * 查看文章归档
@@ -71,17 +109,7 @@ public class QuestionController {
 //        return Result.ok(articleService.listArticles());
 //    }
 //
-    /**
-     * 查看后台文章
-     *
-     * @param conditionVO 条件
-     * @return {@link Result<ArticleBackDTO>} 后台文章列表
-     */
-    @ApiOperation(value = "后台查看问答")
-    @GetMapping("/admin/questions")
-    public Result<PageResult<QuestionVo>> listQuestionBacks(ConditionVO conditionVO) {
-        return Result.ok(questionService.listQuestionBacks(conditionVO));
-    }
+
 //
 //    /**
 //     * 修改文章置顶状态
@@ -138,18 +166,7 @@ public class QuestionController {
 //        return Result.ok();
 //    }
 //
-    /**
-     * 根据id查看后台文章
-     *
-     * @param questionId 文章id
-     * @return {@link Result<ArticleVO>} 后台文章
-     */
-    @ApiOperation(value = "根据id查看后台问答")
-    @ApiImplicitParam(name = "questionId", value = "问答id", required = true, dataType = "Integer")
-    @GetMapping("/admin/questions/{questionId}")
-    public Result<QuestionVo> getArticleBackById(@PathVariable("questionId") Integer questionId) {
-        return Result.ok(questionService.getQuestionBackById(questionId));
-    }
+
 //
 //    /**
 //     * 根据id查看文章

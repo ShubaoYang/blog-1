@@ -8,11 +8,7 @@
     <v-card class="blog-container">
       <div class="category-title">分类 - {{ count }}</div>
       <ul class="category-list">
-        <li
-          class="category-list-item"
-          v-for="item of categoryList"
-          :key="item.id"
-        >
+        <li class="category-list-item" v-for="item of categoryList" :key="item.id">
           <router-link :to="'/categories/' + item.id">
             {{ item.categoryName }}
             <span class="category-count">({{ item.articleCount }})</span>
