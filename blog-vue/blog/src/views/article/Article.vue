@@ -9,14 +9,12 @@
           <div class="first-line">
             <!-- 发表时间 -->
             <span>
-              <i class="iconfont iconrili" />
-              发表于 {{ article.createTime | date }}
+              <i class="iconfont iconrili" /> 发表于 {{ article.createTime | date }}
             </span>
             <span class="separator">|</span>
             <!-- 发表时间 -->
             <span>
-              <i class="iconfont icongengxinshijian" />
-              更新于
+              <i class="iconfont icongengxinshijian" /> 更新于
               <template v-if="article.updateTime">
                 {{ article.updateTime | date }}
               </template>
@@ -36,14 +34,12 @@
           <div class="second-line">
             <!-- 字数统计 -->
             <span>
-              <i class="iconfont iconzishu" />
-              字数统计: {{ wordNum | num }}
+              <i class="iconfont iconzishu" /> 字数统计: {{ wordNum | num }}
             </span>
             <span class="separator">|</span>
             <!-- 阅读时长 -->
             <span>
-              <i class="iconfont iconshijian" />
-              阅读时长: {{ readTime }}
+              <i class="iconfont iconshijian" /> 阅读时长: {{ readTime }}
             </span>
           </div>
           <div class="third-line">
@@ -65,12 +61,7 @@
     <v-row class="article-container">
       <v-col md="9" cols="12">
         <v-card class="article-wrapper">
-          <article
-            id="write"
-            class="article-content markdown-body"
-            v-html="article.articleContent"
-            ref="article"
-          />
+          <article id="write" class="article-content markdown-body" v-html="article.articleContent" ref="article" />
           <!-- 版权声明 -->
           <div class="aritcle-copyright">
             <div>
@@ -85,10 +76,7 @@
             </div>
             <div>
               <span>版权声明：</span>本博客所有文章除特别声明外，均采用
-              <a
-                href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
-                target="_blank"
-              >
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">
                 CC BY-NC-SA 4.0
               </a>
               许可协议。转载请注明文章出处。
@@ -97,11 +85,7 @@
           <!-- 转发 -->
           <div class="article-operation">
             <div class="tag-container">
-              <router-link
-                v-for="item of article.tagDTOList"
-                :key="item.id"
-                :to="'/tags/' + item.id"
-              >
+              <router-link v-for="item of article.tagDTOList" :key="item.id" :to="'/tags/' + item.id">
                 {{ item.tagName }}
               </router-link>
             </div>
@@ -112,9 +96,8 @@
             <!-- 点赞按钮 -->
             <a :class="isLike" @click="like">
               <v-icon size="14" color="#fff">mdi-thumb-up</v-icon> 点赞
-              <span v-show="article.likeCount > 0">{{
-                article.likeCount
-              }}</span>
+              <span v-show="article.likeCount > 0">{{ article.likeCount }}
+              </span>
             </a>
             <a class="reward-btn" v-if="blogInfo.websiteConfig.isReward == 1">
               <!-- 打赏按钮 -->
@@ -123,17 +106,11 @@
               <div class="animated fadeInDown reward-main">
                 <ul class="reward-all">
                   <li class="reward-item">
-                    <img
-                      class="reward-img"
-                      :src="blogInfo.websiteConfig.weiXinQRCode"
-                    />
+                    <img class="reward-img" :src="blogInfo.websiteConfig.weiXinQRCode" />
                     <div class="reward-desc">微信</div>
                   </li>
                   <li class="reward-item">
-                    <img
-                      class="reward-img"
-                      :src="blogInfo.websiteConfig.alipayQRCode"
-                    />
+                    <img class="reward-img" :src="blogInfo.websiteConfig.alipayQRCode" />
                     <div class="reward-desc">支付宝</div>
                   </li>
                 </ul>
@@ -142,15 +119,9 @@
           </div>
           <div class="pagination-post">
             <!-- 上一篇 -->
-            <div
-              :class="isFull(article.lastArticle.id)"
-              v-if="article.lastArticle.id"
-            >
+            <div :class="isFull(article.lastArticle.id)" v-if="article.lastArticle.id">
               <router-link :to="'/articles/' + article.lastArticle.id">
-                <img
-                  class="post-cover"
-                  :src="article.lastArticle.articleCover"
-                />
+                <img class="post-cover" :src="article.lastArticle.articleCover" />
                 <div class="post-info">
                   <div class="label">上一篇</div>
                   <div class="post-title">
@@ -160,15 +131,9 @@
               </router-link>
             </div>
             <!-- 下一篇 -->
-            <div
-              :class="isFull(article.nextArticle.id)"
-              v-if="article.nextArticle.id"
-            >
+            <div :class="isFull(article.nextArticle.id)" v-if="article.nextArticle.id">
               <router-link :to="'/articles/' + article.nextArticle.id">
-                <img
-                  class="post-cover"
-                  :src="article.nextArticle.articleCover"
-                />
+                <img class="post-cover" :src="article.nextArticle.articleCover" />
                 <div class="post-info" style="text-align: right">
                   <div class="label">下一篇</div>
                   <div class="post-title">
@@ -179,25 +144,17 @@
             </div>
           </div>
           <!-- 推荐文章 -->
-          <div
-            class="recommend-container"
-            v-if="article.recommendArticleList.length"
-          >
+          <div class="recommend-container" v-if="article.recommendArticleList.length">
             <div class="recommend-title">
               <v-icon size="20" color="#4c4948">mdi-thumb-up</v-icon> 相关推荐
             </div>
             <div class="recommend-list">
-              <div
-                class="recommend-item"
-                v-for="item of article.recommendArticleList"
-                :key="item.id"
-              >
+              <div class="recommend-item" v-for="item of article.recommendArticleList" :key="item.id">
                 <router-link :to="'/articles/' + item.id">
                   <img class="recommend-cover" :src="item.articleCover" />
                   <div class="recommend-info">
                     <div class="recommend-date">
-                      <i class="iconfont iconrili" />
-                      {{ item.createTime | date }}
+                      <i class="iconfont iconrili" /> {{ item.createTime | date }}
                     </div>
                     <div>{{ item.articleTitle }}</div>
                   </div>
@@ -229,11 +186,7 @@
               <span style="margin-left:10px">最新文章</span>
             </div>
             <div class="article-list">
-              <div
-                class="article-item"
-                v-for="item of article.newestArticleList"
-                :key="item.id"
-              >
+              <div class="article-item" v-for="item of article.newestArticleList" :key="item.id">
                 <router-link :to="'/articles/' + item.id" class="content-cover">
                   <img :src="item.articleCover" />
                 </router-link>
@@ -386,7 +339,7 @@ export default {
           const codeIndex = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
             /[xy]/g,
             function(c) {
-              var r = (d + Math.random() * 16) % 16 | 0;
+              var r = ((d + Math.random() * 16) % 16) | 0;
               d = Math.floor(d / 16);
               return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
             }

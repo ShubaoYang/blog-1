@@ -38,7 +38,7 @@
     <v-row class="article-container">
       <v-col md="12" cols="12">
         <v-card class="article-wrapper">
-          <article id="write" class="article-content markdown-body" v-html="question.answer" ref="article" />
+          <article id="write" class="article-content markdown-body" v-html="question.answer" ref="question" />
 
           <div class="pagination-post">
             <!-- 上一题 -->
@@ -78,7 +78,7 @@ export default {
       imgList: [],
 
       question: {
-        answer: ""
+        
       },
       questionIndex: 0,
       questionSize: 0,
@@ -200,13 +200,13 @@ export default {
       var questionString = localStorage.getItem("problems");
       var questions = JSON.parse(questionString);
       this.questionIndex = this.questionIndex - 1;
-      this.question = questions[this.questionIndex];
+      this.markdownToHtml(questions[this.questionIndex]);
     },
     nextQuestion() {
       var questionString = localStorage.getItem("problems");
       var questions = JSON.parse(questionString);
       this.questionIndex = this.questionIndex + 1;
-      this.question = questions[this.questionIndex];
+      this.markdownToHtml(questions[this.questionIndex]);
     }
   },
   computed: {
