@@ -12,7 +12,7 @@
       </el-button>
     </div>
     <!-- 文章内容 -->
-    <mavon-editor ref="md" v-model="question.answer" style="height:calc(100vh - 260px)" />
+    <mavon-editor ref="md" v-model="question.answer" @imgAdd="uploadImg" style="height:calc(100vh - 260px)" />
     <!-- 添加文章对话框 -->
     <el-dialog :visible.sync="addOrEdit" width="40%" top="3vh">
       <div class="dialog-title-container" slot="title">
@@ -152,6 +152,32 @@ export default {
       this.listCategories();
       this.listTags();
       this.addOrEdit = true;
+    },
+    uploadImg(pos, file) {
+      var formdata = new FormData();
+      if (file.size / 1024 < this.config.UPLOAD_SIZE) {
+        formdata.append("file", file);
+        this.axios
+          .post("/api/admin/articles/images", formdata)
+          .then(({ data }) => {
+            this.$refs.md.$img2Url(pos, data.data);
+          });
+      } else {
+        // 压缩到200KB,这里的200就是要压缩的大小,可自定义
+        imageConversion
+          .compressAccurately(file, this.config.UPLOAD_SIZE)
+          .then(res => {
+            formdata.append(
+              "file",
+              new window.File([res], file.name, { type: file.type })
+            );
+            this.axios
+              .post("/api/admin/articles/images", formdata)
+              .then(({ data }) => {
+                this.$refs.md.$img2Url(pos, data.data);
+              });
+          });
+      }
     },
     autoSaveQuestion() {
       // 自动上传文章
