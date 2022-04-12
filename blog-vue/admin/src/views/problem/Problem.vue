@@ -83,6 +83,7 @@
 </template>
 
 <script>
+import * as imageConversion from "image-conversion";
 export default {
   created() {
     const path = this.$route.path;

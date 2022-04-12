@@ -416,6 +416,15 @@ public interface RedisService {
     byte[] bitGetAll(String key);
 
     /**
+     * 多个bitmap操作
+     *
+     * @param destKey
+     * @param keys
+     * @return
+     */
+    Long bitOpOr(String destKey, String... keys);
+
+    /**
      * 向hyperlog中添加数据
      *
      * @param key   key

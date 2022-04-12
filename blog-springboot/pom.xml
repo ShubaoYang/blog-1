@@ -120,6 +120,19 @@
 <!--                </exclusion>-->
 <!--            </exclusions>-->
         </dependency>
+        <!--springboot的测试框架,里面有对junit4的依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+            <version>4.12</version>
+        </dependency>
+
     </dependencies>
 
     <build>

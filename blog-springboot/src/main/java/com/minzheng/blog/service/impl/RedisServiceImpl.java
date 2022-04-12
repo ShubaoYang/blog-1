@@ -8,6 +8,7 @@ import org.springframework.data.geo.GeoResults;
 import org.springframework.data.geo.Point;
 import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.data.redis.connection.RedisGeoCommands;
+import org.springframework.data.redis.connection.RedisStringCommands;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -266,6 +267,16 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public byte[] bitGetAll(String key) {
         return redisTemplate.execute((RedisCallback<byte[]>) con -> con.get(key.getBytes()));
+    }
+
+    @Override
+    public Long bitOpOr(String destKey, String... key) {
+        byte[][] keys = new byte[key.length][];
+        for (int i = 0; i < key.length; i++) {
+            keys[i] = key[i].getBytes();
+        }
+        redisTemplate.execute((RedisCallback) con -> con.bitOp(RedisStringCommands.BitOperation.OR, destKey.getBytes(), keys));
+        return bitCount(destKey);
     }
 
     @Override
