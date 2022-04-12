@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * 用于redis功能测试
@@ -29,7 +30,7 @@ public class RedisController {
             return "超过校验次数";
         }
         Object ver = redisService.get(SMS_PREFIX + TEST_PHONE);
-        if (null != ver && ((String)ver).equals(code)) {
+        if (null != ver && ((String) ver).equals(code)) {
             redisService.del(SMS_PREFIX + TEST_PHONE + "verify_num");
             redisService.del(SMS_PREFIX + TEST_PHONE);
             return "验证成功";
@@ -67,10 +68,19 @@ public class RedisController {
         return code;
     }
 
-    // todo 排行榜
+    // todo 活跃用户
+    /**
+     * 1. 某一天活跃用户
+     * 2. 近n天活跃用户折线图
+     *    近n个月活跃用户折线图
+     *
+     *    每天0点开始，把上一天的活跃用户合并到月活跃中。 user_login_2022-04-11 user_login_2022-04-1
+     *    每月1号，把上个月的活跃用户合并到年活跃中。  user_login_2022-04 user_login__2022
+     */
 
     /**
      * 用户登录
+     *
      * @param id 用户id
      */
     public void login(int id) {
@@ -107,24 +117,18 @@ public class RedisController {
         System.out.println(yearActive);
     }
 
+    // todo 排行榜
+    public void putRank(String name) {
+        redisService.zIncr("car", name, 1D);
+    }
 
-
-    // todo 活跃用户
     /**
-     * 1. 某一天活跃用户
-     * 2. 近7天活跃用户总数
-     *    近30天活跃用户总数
-     *    全年活跃用户总数
-     * 3. 近7天活跃用户折线图
-     *    近30天活跃用户折线图
-     *    近12个月活跃用户折线图
-     * 4. 月活跃用户同比，环比
-     *    年活跃用户同比，环比
-     *
-     *    每天0点开始，把上一天的活跃用户合并到月活跃中。 day_2022-04-11 month_2022-04-1
-     *    每月1号，把上个月的活跃用户合并到年活跃中。  month_2022-04 year_2022
+     * zverrank
      */
-
+    public void getRank() {
+        Map<Object, Double> cars = redisService.zReverseRangeWithScore("car", 0, 0);
+        System.out.println(cars);
+    }
 
     // todo 双写一致性
 

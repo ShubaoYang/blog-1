@@ -27,4 +27,19 @@ class RedisControllerTest {
     void mergeLoginInfo() {
         redisController.mergeLoginInfo();
     }
+
+    @Test
+    void put() {
+        redisController.putRank("现代");
+        redisController.putRank("现代");
+        redisController.putRank("金杯");
+        redisController.putRank("金杯");
+        redisController.putRank("金杯");
+        redisController.putRank("奔驰");
+        redisController.putRank("宝马");
+    }
+    @Test
+    void getRank() {
+        redisController.getRank();
+    }
 }
