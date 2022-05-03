@@ -33,4 +33,6 @@ public interface QuestionService extends IService<Question> {
     QuestionVo getQuestionBackById(Integer questionId);
 
     List<QuestionVo> getQuestionsBatch();
+
+    void updateQuestionDelete(DeleteVO questionList);
 }

@@ -74,6 +74,20 @@ public class QuestionController {
     }
 
     /**
+     * 恢复或删除问答
+     *
+     * @param deleteVO 逻辑删除信息
+     * @return {@link Result<>}
+     */
+    @OptLog(optType = UPDATE)
+    @ApiOperation(value = "恢复或删除问答")
+    @PutMapping("/admin/questions")
+    public Result<?> updateQuestionDelete(@Valid @RequestBody DeleteVO deleteVO) {
+        questionService.updateQuestionDelete(deleteVO);
+        return Result.ok();
+    }
+
+    /**
      * 根据id查看后台文章
      *
      * @return {@link Result<List<QuestionVo>>} 随机返回10道题
@@ -152,19 +166,7 @@ public class QuestionController {
 //        return Result.ok(uploadStrategyContext.executeUploadStrategy(file, FilePathEnum.ARTICLE.getPath()));
 //    }
 //
-//    /**
-//     * 删除文章
-//     *
-//     * @param articleIdList 文章id列表
-//     * @return {@link Result<>}
-//     */
-//    @OptLog(optType = REMOVE)
-//    @ApiOperation(value = "物理删除文章")
-//    @DeleteMapping("/admin/articles")
-//    public Result<?> deleteArticles(@RequestBody List<Integer> articleIdList) {
-//        articleService.deleteArticles(articleIdList);
-//        return Result.ok();
-//    }
+
 //
 
 //

@@ -13,9 +13,12 @@ import com.minzheng.blog.util.UserUtils;
 import com.minzheng.blog.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.minzheng.blog.constant.CommonConst.FALSE;
 
 
 /**
@@ -37,6 +40,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionDao, Question> impl
     private QuestionTagService questionTagService;
     @Autowired
     private TagService tagService;
+    @Autowired
+    private QuestionService questionService;
 
     public static final int BATCH_QUESTION_NUMBER = 10;
 
@@ -110,6 +115,19 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionDao, Question> impl
         List<QuestionDTO> questions = questionDao.getBatchQuestions(BATCH_QUESTION_NUMBER);
         List<QuestionVo> questionVo = BeanCopyUtils.copyList(questions, QuestionVo.class);
         return questionVo;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updateQuestionDelete(DeleteVO deleteVO) {
+        // 修改文章逻辑删除状态
+        List<Question> questions = deleteVO.getIdList().stream()
+                .map(id -> Question.builder()
+                        .id(id)
+                        .isDelete(deleteVO.getIsDelete())
+                        .build())
+                .collect(Collectors.toList());
+        questionService.updateBatchById(questions);
     }
 
     //    private void saveQuestionTag(QuestionVo questionVo, Integer id) {
