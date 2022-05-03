@@ -1,4 +1,4 @@
-package com.mingzheng.blog.controller;
+package com.minzheng.blog.controller;
 
 
 import com.minzheng.blog.BlogApplication;
