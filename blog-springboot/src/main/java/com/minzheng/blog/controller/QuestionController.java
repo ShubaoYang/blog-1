@@ -69,7 +69,20 @@ public class QuestionController {
     @ApiOperation(value = "根据id查看后台问答")
     @ApiImplicitParam(name = "questionId", value = "问答id", required = true, dataType = "Integer")
     @GetMapping("/admin/questions/{questionId}")
-    public Result<QuestionVo> getArticleBackById(@PathVariable("questionId") Integer questionId) {
+    public Result<QuestionVo> getQuestionBackById(@PathVariable("questionId") Integer questionId) {
+        return Result.ok(questionService.getQuestionBackById(questionId));
+    }
+
+    /**
+     * 根据id查看后台文章
+     *
+     * @param questionId 文章id
+     * @return {@link Result<ArticleVO>} 后台文章
+     */
+    @ApiOperation(value = "根据id查看后台问答")
+    @ApiImplicitParam(name = "questionId", value = "问答id", required = true, dataType = "Integer")
+    @GetMapping("/question/{questionId}")
+    public Result<QuestionVo> getQuestionById(@PathVariable("questionId") Integer questionId) {
         return Result.ok(questionService.getQuestionBackById(questionId));
     }
 

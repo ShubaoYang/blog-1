@@ -90,12 +90,8 @@ export default {
     getArticle() {
       const that = this;
       //查询文章
-      this.axios.get("/api/questions/batch").then(({ data }) => {
-        var questions = data.data;
-        localStorage.setItem("problems", JSON.stringify(questions));
-        this.questionSize = questions.length;
-        var question = questions[this.questionIndex];
-
+       this.axios.get("/api" + this.$route.path).then(({ data }) => {
+        var question = data.data;
         document.title = question.question;
         this.markdownToHtml(question);
 

@@ -66,6 +66,13 @@ const routes = [
     }
   },
   {
+    path: "/question/:questionId",
+    component: resolve => require(["../views/question/Preview.vue"], resolve),
+    meta: {
+      title: "问答预览"
+    }
+  },
+  {
     path: "/categories/:categoryId",
     component: resolve => require(["../views/article/ArticleList.vue"], resolve)
   },
