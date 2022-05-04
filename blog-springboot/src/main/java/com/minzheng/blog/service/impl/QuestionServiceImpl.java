@@ -1,5 +1,7 @@
 package com.minzheng.blog.service.impl;
 
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -11,6 +13,8 @@ import com.minzheng.blog.util.BeanCopyUtils;
 import com.minzheng.blog.util.PageUtils;
 import com.minzheng.blog.util.UserUtils;
 import com.minzheng.blog.vo.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +33,7 @@ import static com.minzheng.blog.constant.CommonConst.FALSE;
  */
 @Service
 public class QuestionServiceImpl extends ServiceImpl<QuestionDao, Question> implements QuestionService {
+    private static final Logger logger = LoggerFactory.getLogger(QuestionServiceImpl.class);
 
     @Autowired
     private CategoryService categoryService;
@@ -104,9 +109,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionDao, Question> impl
     @Override
     public QuestionVo getQuestionBackById(Integer questionId) {
 //        Question question = questionDao.selectById(questionId);
+        logger.info("获取单个问答--{}", questionId);
         QuestionDTO questionDTO = questionDao.getQuestionById(questionId);
         QuestionVo questionVo = BeanCopyUtils.copyObject(questionDTO, QuestionVo.class);
         questionVo.setTagNameList(questionTagService.getTagNamesByQuestionId(questionId));
+        logger.info("获取单个问答--{}", JSONUtil.toJsonStr(questionVo));
         return questionVo;
     }
 
