@@ -8,4 +8,4 @@ server:
 # 配置mysql数据库
 spring:
   profiles:
-    active: dev
+    active: prod
