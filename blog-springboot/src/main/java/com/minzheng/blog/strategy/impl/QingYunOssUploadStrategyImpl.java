@@ -1,17 +1,11 @@
 package com.minzheng.blog.strategy.impl;
 
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
-import com.minzheng.blog.config.OssConfigProperties;
 import com.minzheng.blog.config.QingYunOssProperties;
 import com.qingstor.sdk.config.EnvContext;
 import com.qingstor.sdk.exception.QSException;
 import com.qingstor.sdk.service.Bucket;
 import com.qingstor.sdk.service.QingStor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
