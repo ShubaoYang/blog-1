@@ -27,7 +27,6 @@ spring:
     port: 6379
     password: Rd55Rd55
     database: 0
-  # mq配置
   # 邮箱配置
   mail:
     host: smtp.qq.com
