@@ -1,8 +1,8 @@
 package com.minzheng.blog.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.minzheng.blog.dto.*;
 import com.minzheng.blog.entity.Article;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.minzheng.blog.vo.*;
 
 import java.util.List;
@@ -104,4 +104,11 @@ public interface ArticleService extends IService<Article> {
      */
     void deleteArticles(List<Integer> articleIdList);
 
+    /**
+     * 导出文章
+     *
+     * @param articleIdList 文章id列表
+     * @return {@link List}<{@link String}> 文件地址
+     */
+    List<String> exportArticles(List<Integer> articleIdList);
 }

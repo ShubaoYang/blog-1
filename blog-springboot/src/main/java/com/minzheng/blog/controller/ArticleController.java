@@ -5,18 +5,18 @@ import com.minzheng.blog.annotation.OptLog;
 import com.minzheng.blog.dto.*;
 import com.minzheng.blog.enums.FilePathEnum;
 import com.minzheng.blog.service.ArticleService;
+import com.minzheng.blog.strategy.context.ArticleImportStrategyContext;
 import com.minzheng.blog.strategy.context.UploadStrategyContext;
 import com.minzheng.blog.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.List;
 
 import static com.minzheng.blog.constant.OptTypeConst.*;
 
@@ -33,6 +33,8 @@ public class ArticleController {
     private ArticleService articleService;
     @Autowired
     private UploadStrategyContext uploadStrategyContext;
+    @Autowired
+    private ArticleImportStrategyContext articleImportStrategyContext;
 
     /**
      * 查看文章归档
@@ -201,5 +203,30 @@ public class ArticleController {
         return Result.ok();
     }
 
-}
+    /**
+     * 导出文章
+     *
+     * @param articleIdList 文章id列表
+     * @return {@link List<String>} 文件url列表
+     */
+    @ApiOperation(value = "导出文章")
+    @ApiImplicitParam(name = "articleIdList", value = "文章id", required = true, dataType = "List<Integer>")
+    @PostMapping("/admin/articles/export")
+    public Result<List<String>> exportArticles(@RequestBody List<Integer> articleIdList) {
+        return Result.ok(articleService.exportArticles(articleIdList));
+    }
 
+    /**
+     * 导入文章
+     *
+     * @param file 文件
+     * @param type 文章类型
+     * @return {@link Result<>}
+     */
+    @ApiOperation(value = "导入文章")
+    @PostMapping("/admin/articles/import")
+    public Result<?> importArticles(MultipartFile file, @RequestParam(required = false) String type) {
+        articleImportStrategyContext.importArticles(file, type);
+        return Result.ok();
+    }
+}

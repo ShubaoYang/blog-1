@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.minzheng.blog.dto.MessageBackDTO;
 import com.minzheng.blog.service.BlogInfoService;
+import com.minzheng.blog.util.HTMLUtils;
 import com.minzheng.blog.util.PageUtils;
 import com.minzheng.blog.vo.ConditionVO;
 import com.minzheng.blog.vo.PageResult;
@@ -46,7 +47,6 @@ public class MessageServiceImpl extends ServiceImpl<MessageDao, Message> impleme
     @Autowired
     private BlogInfoService blogInfoService;
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveMessage(MessageVO messageVO) {
         // 判断是否需要审核
@@ -55,6 +55,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageDao, Message> impleme
         String ipAddress = IpUtils.getIpAddress(request);
         String ipSource = IpUtils.getIpSource(ipAddress);
         Message message = BeanCopyUtils.copyObject(messageVO, Message.class);
+        message.setMessageContent(HTMLUtils.filter(message.getMessageContent()));
         message.setIpAddress(ipAddress);
         message.setIsReview(isReview == TRUE ? FALSE : TRUE);
         message.setIpSource(ipSource);

@@ -82,6 +82,22 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <el-form-item label="默认文章封面">
+            <el-upload
+              class="cover-uploader"
+              action="/api/admin/config/images"
+              :before-upload="beforeUpload"
+              :show-file-list="false"
+              :on-success="handleArticleCoverSuccess"
+            >
+              <img
+                v-if="websiteConfigForm.articleCover"
+                :src="websiteConfigForm.articleCover"
+                class="cover"
+              />
+              <i v-else class="el-icon-plus cover-uploader-icon" />
+            </el-upload>
+          </el-form-item>
           <el-form-item label="邮箱通知">
             <el-radio-group v-model="websiteConfigForm.isEmailNotice">
               <el-radio :label="0">关闭</el-radio>
@@ -149,6 +165,7 @@
 </template>
 
 <script>
+import * as imageConversion from "image-conversion";
 export default {
   created() {
     this.getWebsiteConfig();
@@ -173,6 +190,7 @@ export default {
         isReward: 1,
         weiXinQRCode: "",
         alipayQRCode: "",
+        articleCover: "",
         isChatRoom: 1,
         websocketUrl: "",
         isMusicPlayer: 1,
@@ -189,6 +207,19 @@ export default {
         this.websiteConfigForm = data.data;
       });
     },
+    beforeUpload(file) {
+      return new Promise(resolve => {
+        if (file.size / 1024 < this.config.UPLOAD_SIZE) {
+          resolve(file);
+        }
+        // 压缩到200KB,这里的200就是要压缩的大小,可自定义
+        imageConversion
+          .compressAccurately(file, this.config.UPLOAD_SIZE)
+          .then(res => {
+            resolve(res);
+          });
+      });
+    },
     handleClick(tab) {
       console.log(tab);
     },
@@ -197,6 +228,9 @@ export default {
     },
     handleUserAvatarSuccess(response) {
       this.websiteConfigForm.userAvatar = response.data;
+    },
+    handleArticleCoverSuccess(response) {
+      this.websiteConfigForm.articleCover = response.data;
     },
     handleTouristAvatarSuccess(response) {
       this.websiteConfigForm.touristAvatar = response.data;
@@ -250,6 +284,29 @@ export default {
 .avatar {
   width: 120px;
   height: 120px;
+  display: block;
+}
+.cover-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.cover-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.cover-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 300px;
+  height: 160px;
+  line-height: 160px;
+  text-align: center;
+}
+.cover {
+  width: 300px;
+  height: 160px;
   display: block;
 }
 </style>

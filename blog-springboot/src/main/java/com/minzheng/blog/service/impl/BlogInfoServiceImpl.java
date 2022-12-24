@@ -22,7 +22,6 @@ import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
@@ -153,7 +152,7 @@ public class BlogInfoServiceImpl implements BlogInfoService {
             websiteConfigVO = JSON.parseObject(websiteConfig.toString(), WebsiteConfigVO.class);
         } else {
             // 从数据库中加载
-            String config = websiteConfigDao.selectById(1).getConfig();
+            String config = websiteConfigDao.selectById(DEFAULT_CONFIG_ID).getConfig();
             websiteConfigVO = JSON.parseObject(config, WebsiteConfigVO.class);
             redisService.set(WEBSITE_CONFIG, config);
         }
@@ -166,7 +165,6 @@ public class BlogInfoServiceImpl implements BlogInfoService {
         return Objects.nonNull(value) ? value.toString() : "";
     }
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateAbout(BlogInfoVO blogInfoVO) {
         redisService.set(ABOUT, blogInfoVO.getAboutContent());
@@ -210,7 +208,7 @@ public class BlogInfoServiceImpl implements BlogInfoService {
      */
     private List<ArticleRankDTO> listArticleRank(Map<Object, Double> articleMap) {
         // 提取文章id
-        List<Integer> articleIdList = new ArrayList<>();
+        List<Integer> articleIdList = new ArrayList<>(articleMap.size());
         articleMap.forEach((key, value) -> articleIdList.add((Integer) key));
         // 查询文章信息
         return articleDao.selectList(new LambdaQueryWrapper<Article>()
